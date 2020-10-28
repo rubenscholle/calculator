@@ -1,12 +1,12 @@
 <div>
-    <span>Result: <em></em></span>
+    <span>Result: <em>{{result}}</em></span>
 </div>
 <div>
     <span>Input: <em>{{input}}</em></span>
 </div>
 <br>
 <div>
-    <button >Calculate</button>
+    <button (click)="result=calculate(input)">Calculate</button>
 </div>
 <div>
     <button (click)="concatenate('+')">+</button>
@@ -31,6 +31,6 @@
     <button (click)="concatenate('9')">9</button>
 </div>
 <div>
-    <button (click)="concatenate('0')">7</button>
+    <button (click)="concatenate('0')">0</button>
     <button (click)="input=''">Clear</button>
 </div>
