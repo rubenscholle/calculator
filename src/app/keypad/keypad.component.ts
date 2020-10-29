@@ -27,9 +27,11 @@ export class KeypadComponent implements OnInit {
     let operand2: string;
     let operator: string;
     let iOperator: number;
-    let result = 0;
+    let result: number;
 
     let subString: string;
+    let firstSubString: string;
+    let lastSubString: string;
     
     let calculator = new Calculator();
 
@@ -56,12 +58,35 @@ export class KeypadComponent implements OnInit {
 
     subString = input;
 
+    /*
+    Because of "point before line calculation", the input string is first scanned
+    for multiplication/division operators. Corresponding calculations are
+    conducted first
+    */
+    while (subString.search(/[\*\/]/) != -1) {
+      iOperator = subString.search(/[\*\/]/);
+      operator = subString[iOperator];
+      firstSubString = subString.substring(0, (iOperator));
+      lastSubString = subString.substring((iOperator+1), subString.length);
+      operand1 = getLastNumber(firstSubString);
+      firstSubString = firstSubString.substring(0, (firstSubString.length-operand1.length))
+      operand2 = getFirstNumber(lastSubString);
+      lastSubString = lastSubString.substring((operand2.length), lastSubString.length)
+      result = calculator.calculate(operator, Number(operand1), Number(operand2));
+      subString = firstSubString + result + lastSubString;
+    }
+    
     operand1 = getFirstNumber(subString);
     iOperator = subString.search(/[\+\-\*\/]/);
     operator = subString[iOperator];
     subString = subString.substring(iOperator+1, subString.length);
     operand2 = getFirstNumber(subString);
     subString = subString.substring(operand2.length, subString.length);
+    /*
+    If the input string begins with a "minus", operand1 will be an empty
+    string (at first time). Number() automatically turns empty strings into
+    the number 0 (zero)
+    */
     result = calculator.calculate(operator, Number(operand1), Number(operand2));
 
     while (subString.length > 1) {
